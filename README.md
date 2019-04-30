@@ -1,4 +1,4 @@
-#Laravel Zoom
+##Laravel Zoom
 
 A simple package to integrate Zoom into Laravel.
 

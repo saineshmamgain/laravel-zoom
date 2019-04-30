@@ -3,7 +3,7 @@
 /**
   * File : laravel-zoom.php
   * Author: Sainesh Mamgain
-  * Email: sainesh.m@basicfirst.net
+  * Email: saineshmamgain@gmail.com
   * Date: 29/4/19
   * Time: 5:30 PM
   */

@@ -5,7 +5,7 @@ use Illuminate\Support\ServiceProvider;
 /**
   * File : LaravelZoomServiceProvider.php
   * Author: Sainesh Mamgain
-  * Email: sainesh.m@basicfirst.net
+  * Email: saineshmamgain@gmail.com
   * Date: 29/4/19
   * Time: 4:42 PM
   */

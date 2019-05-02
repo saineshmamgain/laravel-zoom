@@ -1,6 +1,8 @@
 <?php
 namespace CodeZilla\LaravelZoom;
 
+use Jackiedo\DotenvEditor\DotenvEditor;
+
 /**
   * File : LaravelZoom.php
   * Author: Sainesh Mamgain
@@ -28,5 +30,4 @@ class LaravelZoom {
         $_sig = $this->key . "." . $meeting_number . "." . $time . "." . $role . "." . base64_encode($hash);
         return rtrim(strtr(base64_encode($_sig), '+/', '-_'), '=');
     }
-
 }

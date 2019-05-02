@@ -9,7 +9,10 @@
             "email": "saineshmamgain@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "spomky-labs/base64url": "^2.0",
+        "jackiedo/dotenv-editor": "^1.0"
+    },
     "autoload": {
         "psr-4": {
             "CodeZilla\\LaravelZoom\\": "src/"

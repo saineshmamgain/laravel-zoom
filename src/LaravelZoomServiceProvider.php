@@ -1,6 +1,7 @@
 <?php
 namespace CodeZilla\LaravelZoom;
 use Illuminate\Support\ServiceProvider;
+use Jackiedo\DotenvEditor\Facades\DotenvEditor;
 
 /**
   * File : LaravelZoomServiceProvider.php
@@ -28,6 +29,11 @@ class LaravelZoomServiceProvider extends ServiceProvider {
         $this->publishes([
             __DIR__ . '/../config/laravel-zoom.php', config_path('laravel-zoom.php')
         ]);
+        if ($this->app->runningInConsole()){
+            $this->commands([
+                \CodeZilla\LaravelZoom\Commands\JWTCommand::class,
+            ]);
+        }
     }
 
 }

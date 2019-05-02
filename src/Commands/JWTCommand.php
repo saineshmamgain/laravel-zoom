@@ -39,66 +39,48 @@ class JWTCommand extends Command{
         if (empty($api_secret))
             $api_secret = config('laravel-zoom.zoom_api_secret');
 
-        $actions = [];
-
-        if (empty($api_key)){
+        if (empty($api_key))
             $api_key = $this->ask('Enter Zoom API Key: ');
-            $actions[] = function () use (&$api_key){
-                $this->changeEnv(['ZOOM_API_KEY', $api_key]);
-            };
-        }
 
-        if (empty($api_secret)){
+        if (empty($api_secret))
             $api_secret = $this->ask('Enter Zoom API Secret: ');
-            $actions[] = function () use (&$api_secret){
-                $this->changeEnv(['ZOOM_API_SECRET', $api_secret]);
-            };
-        }
+
+        $zoom_jwt_expires = (new Carbon())->addDays($days)->addHours($hours)->unix();
 
         $header = Base64Url::encode(json_encode(["alg" => "HS256","typ" => "JWT"]));
-        $payload = Base64Url::encode(json_encode(["iss"=> $api_key,"exp"=> (new Carbon())->addDays($days)->addHours($hours)->unix()]));
+        $payload = Base64Url::encode(json_encode(["iss"=> $api_key,"exp"=> $zoom_jwt_expires]));
 
         $data = "$header.$payload";
         $signature = hash_hmac('sha256', $data, $api_secret,true);
         $signature = Base64Url::encode($signature);
         $jwt = "$data.$signature";
 
-        $actions[] = function () use (&$jwt){
-            $this->changeEnv(['ZOOM_JWT', $jwt]);
-        };
-
-        $bar = $this->output->createProgressBar(count($actions));
-
-        $bar->start();
-
-        foreach ($actions as $action) {
-            $this->doAction($action);
-            $bar->advance();
-        }
-
-        $bar->finish();
-    }
-
-    private function doAction($action){
-        echo var_export($action);
-        $action();
+        $this->changeEnv([
+            'ZOOM_API_KEY' => $api_key,
+            'ZOOM_API_SECRET' => $api_secret,
+            'ZOOM_JWT' => $jwt,
+            'ZOOM_JWT_EXPIRES_ON' => $zoom_jwt_expires
+        ]);
     }
 
     private function changeEnv($data = array()){
         if(count($data) > 0){
             $env = file_get_contents(base_path() . '/.env');
-            $env = preg_split('/\s+/', $env);;
-            foreach((array)$data as $key => $value){
-                foreach($env as $env_key => $env_value){
-                    $entry = explode("=", $env_value, 2);
-                    if($entry[0] == $key){
-                        $env[$env_key] = $key . "=" . $value;
-                    } else {
-                        $env[$env_key] = $env_value;
-                    }
-                }
+            $env = preg_split('/\s+/', $env);
+            $envArray = [];
+            foreach ($env as $item) {
+                $item = explode('=', $item, 2);
+                $envKey = isset($item[0])?trim($item[0]):'';
+                $envValue = isset($item[1])?trim($item[1]):'';
+                if (!empty($envKey))
+                    $envArray[$envKey] = $envValue;
             }
-            $env = implode("\n", $env);
+
+            foreach ($data as $key => $datum) {
+                $envArray[strtoupper($key)] = $datum;
+            }
+
+            $env = urldecode(http_build_query($envArray, null, "\n"));
             file_put_contents(base_path() . '/.env', $env);
             return true;
         } else {

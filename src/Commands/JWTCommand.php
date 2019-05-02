@@ -59,7 +59,7 @@ class JWTCommand extends Command{
         $payload = Base64Url::encode(json_encode(["iss"=> $api_key,"exp"=> (new Carbon())->addDays($days)->addHours($hours)->unix()]));
 
         $data = "$header.$payload";
-        $signature = hash_hmac('HS256', $data, $api_secret,true);
+        $signature = hash_hmac('sha256', $data, $api_secret,true);
         $signature = Base64Url::encode($signature);
         $jwt = "$data.$signature";
 

@@ -10,8 +10,7 @@
         }
     ],
     "require": {
-        "spomky-labs/base64url": "^2.0",
-        "jackiedo/dotenv-editor": "^1.0"
+        "spomky-labs/base64url": "^2.0"
     },
     "autoload": {
         "psr-4": {

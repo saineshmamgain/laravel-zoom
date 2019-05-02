@@ -50,7 +50,6 @@ class JWTCommand extends Command{
 
         $header = Base64Url::encode(json_encode(["alg" => "HS256","typ" => "JWT"]));
         $payload = Base64Url::encode(json_encode(["iss"=> $api_key,"exp"=> $zoom_jwt_expires]));
-
         $data = "$header.$payload";
         $signature = hash_hmac('sha256', $data, $api_secret,true);
         $signature = Base64Url::encode($signature);
@@ -67,7 +66,7 @@ class JWTCommand extends Command{
     private function changeEnv($data = array()){
         if(count($data) > 0){
             $env = file_get_contents(base_path() . '/.env');
-            $env = preg_split('/\s+/', $env);
+            $env = explode("\n", $env);
             $envArray = [];
             foreach ($env as $key => $item) {
                 $item = explode('=', $item, 2);
@@ -78,7 +77,6 @@ class JWTCommand extends Command{
                 else
                     $envArray['WHITE_SPACE_'.$key] = "\n";
             }
-
             foreach ($data as $key => $datum) {
                 $envArray[strtoupper($key)] = $datum;
             }
@@ -90,7 +88,6 @@ class JWTCommand extends Command{
                     $newEnv .= $key."=".$item."\n";
                 }
             }
-
             file_put_contents(base_path() . '/.env', $newEnv);
             return true;
         } else {

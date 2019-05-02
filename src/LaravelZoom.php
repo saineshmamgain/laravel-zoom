@@ -1,6 +1,8 @@
 <?php
 namespace CodeZilla\LaravelZoom;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Artisan;
 use Jackiedo\DotenvEditor\DotenvEditor;
 
 /**
@@ -30,4 +32,13 @@ class LaravelZoom {
         $_sig = $this->key . "." . $meeting_number . "." . $time . "." . $role . "." . base64_encode($hash);
         return rtrim(strtr(base64_encode($_sig), '+/', '-_'), '=');
     }
+
+    public function getJWTToken(int $zoom_jwt_expires = 0){
+        if ($zoom_jwt_expires == 0)
+            $zoom_jwt_expires = (new Carbon())->addDays(30)->unix();
+
+        return JWT::generate($this->key, $this->secret, ["alg" => "HS256","typ" => "JWT"], ["iss"=> $this->key,"exp"=> $zoom_jwt_expires]);
+    }
+
+
 }

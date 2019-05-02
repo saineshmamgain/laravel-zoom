@@ -80,6 +80,7 @@ class JWTCommand extends Command{
     }
 
     private function doAction($action){
+        echo var_export($action);
         $action();
     }
 

@@ -2,6 +2,7 @@
 namespace CodeZilla\LaravelZoom\Commands;
 
 use Illuminate\Console\Command;
+use Jackiedo\DotenvEditor\Facades\DotenvEditor;
 
 /**
  * File : JWTCommand.php
@@ -37,6 +38,7 @@ class JWTCommand extends Command{
         if (empty($api_secret))
             $api_secret = $this->ask('Enter Zoom API Secret: ');
 
-
+        DotenvEditor::setKey('ZOOM_API_KEY', $api_key);
+        DotenvEditor::setKey('ZOOM_API_SECRET', $api_secret);
     }
 }

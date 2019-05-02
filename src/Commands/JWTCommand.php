@@ -4,6 +4,7 @@ namespace CodeZilla\LaravelZoom\Commands;
 use Base64Url\Base64Url;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 
 /**
  * File : JWTCommand.php
@@ -68,20 +69,29 @@ class JWTCommand extends Command{
             $env = file_get_contents(base_path() . '/.env');
             $env = preg_split('/\s+/', $env);
             $envArray = [];
-            foreach ($env as $item) {
+            foreach ($env as $key => $item) {
                 $item = explode('=', $item, 2);
                 $envKey = isset($item[0])?trim($item[0]):'';
                 $envValue = isset($item[1])?trim($item[1]):'';
                 if (!empty($envKey))
                     $envArray[$envKey] = $envValue;
+                else
+                    $envArray['WHITE_SPACE_'.$key] = "\n";
             }
 
             foreach ($data as $key => $datum) {
                 $envArray[strtoupper($key)] = $datum;
             }
+            $newEnv = "";
+            foreach ($envArray as $key => $item) {
+                if (Str::startsWith($key, 'WHITE_SPACE_')){
+                    $newEnv .= "\n";
+                }else{
+                    $newEnv .= $key."=".$item."\n";
+                }
+            }
 
-            $env = urldecode(http_build_query($envArray, null, "\n"));
-            file_put_contents(base_path() . '/.env', $env);
+            file_put_contents(base_path() . '/.env', $newEnv);
             return true;
         } else {
             return false;

@@ -97,10 +97,18 @@ class MakeRequest {
             $request = $this->client->request($requestMethod, $this->base_url . $this->url, $options);
             $status = $request->getStatusCode();
             $body = $request->getBody()->getContents();
+            $body = $this->checkAndReturnJSON($body);
             return ['status' => $status, 'body' => $body];
         }catch (Exception $exception){
             return ['status' => 0, 'body' => $exception->getMessage()];
         }
+    }
+
+    public function checkAndReturnJSON($str) {
+        $json = json_decode($str);
+        if ($json && $str != $json)
+            return $json;
+        return $str;
     }
 
 }

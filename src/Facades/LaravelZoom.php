@@ -1,5 +1,5 @@
 <?php
-namespace CodeZilla\LaravelZoom\Facade;
+namespace CodeZilla\LaravelZoom\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

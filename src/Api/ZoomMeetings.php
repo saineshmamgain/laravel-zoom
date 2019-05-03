@@ -31,9 +31,9 @@ class ZoomMeetings {
 
         $params = http_build_query($params);
 
-        $uri = Str::replaceFirst('{user_id}', $user_id, config('laravel-zoom.meetings.list.uri'));
+        $uri = Str::replaceFirst('{user_id}', $user_id, config('laravel-zoom.urls.meetings.list.uri'));
 
         $request = new MakeRequest($uri . '?' . $params);
-        return $request->sendRequest(config('laravel-zoom.meetings.list.method'));
+        return $request->sendRequest(config('laravel-zoom.urls.meetings.list.method'));
     }
 }

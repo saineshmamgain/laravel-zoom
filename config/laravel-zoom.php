@@ -35,6 +35,10 @@ return [
             'list' => [
                 'method' => 'get',
                 'uri' => '/users/{user_id}/meetings',
+            ],
+            'create' => [
+                'method' => 'post',
+                'uri' => '/users/{user_id}/meetings'
             ]
         ]
     ],

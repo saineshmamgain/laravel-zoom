@@ -30,6 +30,14 @@ return [
                 'method' => 'get',
                 'uri' => '/users'
             ]
+        ],
+        'meetings' => [
+            'list' => [
+                'method' => 'get',
+                'uri' => '/users/{user_id}/meetings',
+            ]
         ]
-    ]
+    ],
+
+    'default_user_id' => 'fTJCLJ7lSg6Ywh869X8h6w'
 ];

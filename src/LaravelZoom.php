@@ -2,6 +2,7 @@
 namespace CodeZilla\LaravelZoom;
 
 use Carbon\Carbon;
+use CodeZilla\LaravelZoom\Api\ZoomMeetings;
 use CodeZilla\LaravelZoom\Api\ZoomUsers;
 
 /**
@@ -40,5 +41,9 @@ class LaravelZoom {
 
     public function getUsers(string $status = 'active', int $page_number = 1){
         return (new ZoomUsers())->getUsers($status, $page_number);
+    }
+
+    public function getMeetings(string $user_id, string $type = 'live', int $page_number = 1){
+        return (new ZoomMeetings())->getMeetings($user_id, $type, $page_number);
     }
 }

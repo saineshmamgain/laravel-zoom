@@ -105,7 +105,7 @@ class MakeRequest {
     }
 
     public function checkAndReturnJSON($str) {
-        $json = json_decode($str);
+        $json = json_decode($str, true);
         if ($json && $str != $json)
             return $json;
         return $str;

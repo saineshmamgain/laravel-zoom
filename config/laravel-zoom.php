@@ -19,4 +19,8 @@ return [
 
     'zoom_jwt_expires_on' => env('ZOOM_JWT_EXPIRES_ON'),
 
+    'api' => [
+        'base_url' => 'https://api.zoom.us/v2',
+        'per_page_records' => 30,
+    ],
 ];

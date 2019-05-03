@@ -20,9 +20,9 @@ class JWT {
         if (self::validJWTExists()){
             return env('ZOOM_JWT_TOKEN');
         }
-        $header = self::base64UrlEncode(json_encode($headers));
-        $payload = self::base64UrlEncode(json_encode($payload));
-        $data = "$header.$payload";
+        $headerEncoded = self::base64UrlEncode(json_encode($headers));
+        $payloadEncoded = self::base64UrlEncode(json_encode($payload));
+        $data = "$headerEncoded.$payloadEncoded";
         $signature = hash_hmac($algo, $data, $secret,true);
         $signature = self::base64UrlEncode($signature);
         $jwt = "$data.$signature";
@@ -30,7 +30,7 @@ class JWT {
             'ZOOM_API_KEY' => $key,
             'ZOOM_API_SECRET' => $secret,
             'ZOOM_JWT_TOKEN' => $jwt,
-            'ZOOM_JWT_EXPIRES_ON' => $headers['exp']
+            'ZOOM_JWT_EXPIRES_ON' => $payload['exp']
         ]);
         return $jwt;
     }

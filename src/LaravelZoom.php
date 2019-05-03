@@ -2,8 +2,7 @@
 namespace CodeZilla\LaravelZoom;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Artisan;
-use Jackiedo\DotenvEditor\DotenvEditor;
+use CodeZilla\LaravelZoom\Api\ZoomUsers;
 
 /**
   * File : LaravelZoom.php
@@ -36,9 +35,10 @@ class LaravelZoom {
     public function getJWTToken(int $zoom_jwt_expires = 0){
         if ($zoom_jwt_expires == 0)
             $zoom_jwt_expires = (new Carbon())->addDays(30)->unix();
-
         return JWT::generate($this->key, $this->secret, ["alg" => "HS256","typ" => "JWT"], ["iss"=> $this->key,"exp"=> $zoom_jwt_expires]);
     }
 
-
+    public function getUser(string $status = 'active', int $page_number = 1){
+        return (new ZoomUsers())->getUsers($status, $page_number);
+    }
 }

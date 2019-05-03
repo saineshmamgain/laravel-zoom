@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Facade;
 /**
  * Class LaravelZoom
  * @package CodeZilla\LaravelZoom\Facade
- * @method static string generateSignature(int $meeting_number)
+ * @method static generateSignature(int $meeting_number)
+ * @method static getUser(string $status = 'active', int $page_number = 1)
  */
 
 class LaravelZoom extends Facade{

@@ -30,8 +30,8 @@ class ZoomUsers {
 
         $params = http_build_query($params);
 
-        $request = new MakeRequest('/users?'.$params);
-        return $request->sendRequest();
+        $request = new MakeRequest(config('laravel-zoom.users.list.uri') . '?' . $params);
+        return $request->sendRequest(config('laravel-zoom.users.list.method'));
     }
 
 }

@@ -23,4 +23,13 @@ return [
         'base_url' => 'https://api.zoom.us/v2',
         'per_page_records' => 30,
     ],
+
+    'urls' => [
+        'users' => [
+            'list' => [
+                'method' => 'get',
+                'uri' => '/users'
+            ]
+        ]
+    ]
 ];

@@ -38,7 +38,7 @@ class LaravelZoom {
         return JWT::generate($this->key, $this->secret, ["alg" => "HS256","typ" => "JWT"], ["iss"=> $this->key,"exp"=> $zoom_jwt_expires]);
     }
 
-    public function getUser(string $status = 'active', int $page_number = 1){
+    public function getUsers(string $status = 'active', int $page_number = 1){
         return (new ZoomUsers())->getUsers($status, $page_number);
     }
 }

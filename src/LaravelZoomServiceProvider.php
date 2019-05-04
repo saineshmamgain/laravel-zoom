@@ -32,7 +32,7 @@ class LaravelZoomServiceProvider extends ServiceProvider {
      */
     public function boot(){
         $this->publishes([
-            __DIR__ . '/../config/laravel-zoom.php', config_path('laravel-zoom.php')
+            __DIR__ . '/../config/laravel-zoom.php' => config_path('laravel-zoom.php')
         ], 'config');
         if ($this->app->runningInConsole()){
             $this->commands([

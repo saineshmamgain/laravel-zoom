@@ -22,11 +22,17 @@ class JWTCommand extends Command{
 
     protected $editor;
 
+    /**
+     * JWTCommand constructor.
+     */
     public function __construct()
     {
         parent::__construct();
     }
 
+    /**
+     * @throws \Exception
+     */
     public function handle(){
         $days = $this->option('days');
         $hours = $this->option('hours');

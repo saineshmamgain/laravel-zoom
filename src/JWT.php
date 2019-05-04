@@ -16,6 +16,14 @@ use InvalidArgumentException;
 
 class JWT {
 
+    /**
+     * @param string $key
+     * @param string $secret
+     * @param array $headers
+     * @param array $payload
+     * @param string $algo
+     * @return mixed|string
+     */
     public static function generate(string $key, string $secret, array $headers, array $payload, string $algo = "sha256"){
         if (self::validJWTExists()){
             return env('ZOOM_JWT_TOKEN');
@@ -35,6 +43,9 @@ class JWT {
         return $jwt;
     }
 
+    /**
+     * @return bool
+     */
     public static function validJWTExists(){
         if (!empty(env('ZOOM_JWT_TOKEN')) && !empty(env('ZOOM_JWT_EXPIRES_ON'))){
             $expires = Carbon::createFromTimestamp(env('ZOOM_JWT_EXPIRES_ON'));
@@ -45,12 +56,21 @@ class JWT {
         return false;
     }
 
+    /**
+     * @param string $data
+     * @param bool $usePadding
+     * @return string
+     */
     public static function base64UrlEncode(string $data, bool $usePadding = false): string
     {
         $encoded = strtr(base64_encode($data), '+/', '-_');
         return true === $usePadding ? $encoded : rtrim($encoded, '=');
     }
 
+    /**
+     * @param string $data
+     * @return string
+     */
     public static function base64UrlDecode(string $data): string
     {
         $decoded = base64_decode(strtr($data, '-_', '+/'), true);
@@ -64,6 +84,10 @@ class JWT {
 
     }
 
+    /**
+     * @param array $data
+     * @return bool
+     */
     public static function updateEnv($data = array()){
         if(count($data) > 0){
             $env = file_get_contents(base_path() . '/.env');

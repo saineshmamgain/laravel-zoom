@@ -19,12 +19,22 @@ class LaravelZoom {
     private $key;
     private $secret;
 
+    /**
+     * LaravelZoom constructor.
+     * @param $key
+     * @param $secret
+     */
     public function __construct($key, $secret)
     {
         $this->key = $key;
         $this->secret = $secret;
     }
 
+    /**
+     * @param $meeting_number
+     * @param int $role
+     * @return string
+     */
     public function generateSignature($meeting_number, $role = 0){
         $time = time() * 1000;
         $data = base64_encode($this->key . $meeting_number . $time . $role);
@@ -33,17 +43,79 @@ class LaravelZoom {
         return rtrim(strtr(base64_encode($_sig), '+/', '-_'), '=');
     }
 
+    /**
+     * @param int $zoom_jwt_expires
+     * @return mixed|string
+     * @throws \Exception
+     */
     public function getJWTToken(int $zoom_jwt_expires = 0){
         if ($zoom_jwt_expires == 0)
             $zoom_jwt_expires = (new Carbon())->addDays(30)->unix();
         return JWT::generate($this->key, $this->secret, ["alg" => "HS256","typ" => "JWT"], ["iss"=> $this->key,"exp"=> $zoom_jwt_expires]);
     }
 
+    /**
+     * @param string $status
+     * @param int $page_number
+     * @return array
+     */
     public function getUsers(string $status = 'active', int $page_number = 1){
         return (new ZoomUsers())->getUsers($status, $page_number);
     }
 
+    /**
+     * @param string $user_id
+     * @param string $type
+     * @param int $page_number
+     * @return array
+     */
     public function getMeetings(string $user_id, string $type = 'live', int $page_number = 1){
         return (new ZoomMeetings())->getMeetings($user_id, $type, $page_number);
+    }
+
+    /**
+     * @param string $user_id
+     * @param string $topic
+     * @param string|null $password
+     * @param string|null $agenda
+     * @param array|null $tracking_fields
+     * @param array|null $settings
+     * @return array
+     */
+    public function createInstantMeeting(string $user_id, string $topic, string $password = null, string $agenda = null, array $tracking_fields = null, array $settings = null){
+        return (new ZoomMeetings())->createInstantMeeting($user_id, $topic, $password, $agenda, $tracking_fields, $settings);
+    }
+
+    /**
+     * @param string $user_id
+     * @param string $topic
+     * @param Carbon $start_time
+     * @param int $duration
+     * @param string $timezone
+     * @param string|null $schedule_for
+     * @param string|null $password
+     * @param string|null $agenda
+     * @param array|null $tracking_fields
+     * @param array|null $settings
+     * @return array
+     */
+    public function createScheduledMeeting(string $user_id, string $topic, Carbon $start_time, int $duration = 60, string $timezone = 'Asia/Kolkata', string $schedule_for = null, string $password = null, string $agenda = null, array $tracking_fields = null, array $settings = null){
+        return (new ZoomMeetings())->createScheduledMeeting($user_id, $topic, $start_time, $duration, $timezone, $schedule_for, $password, $agenda, $tracking_fields,$settings);
+    }
+
+    /**
+     * @param int $meeting_id
+     * @return array
+     */
+    public function retrieveMeeting(int $meeting_id){
+        return (new ZoomMeetings())->retrieveMeeting($meeting_id);
+    }
+
+    /**
+     * @param int $meeting_id
+     * @return array
+     */
+    public function deleteMeeting(int $meeting_id){
+        return (new ZoomMeetings())->deleteMeeting($meeting_id);
     }
 }

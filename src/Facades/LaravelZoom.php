@@ -1,6 +1,7 @@
 <?php
 namespace CodeZilla\LaravelZoom\Facades;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -14,13 +15,21 @@ use Illuminate\Support\Facades\Facade;
 /**
  * Class LaravelZoom
  * @package CodeZilla\LaravelZoom\Facade
+ * @method static getJWTToken(int $zoom_jwt_expires = 0)
  * @method static generateSignature(int $meeting_number)
  * @method static getUsers(string $status = 'active', int $page_number = 1)
  * @method static getMeetings(string $user_id, string $type = 'live', int $page_number = 1)
+ * @method static createInstantMeeting(string $user_id, string $topic, string $password = null, string $agenda = null, array $tracking_fields = null, array $settings = null)
+ * @method static createScheduledMeeting(string $user_id, string $topic, Carbon $start_time, int $duration = 60, string $timezone = 'Asia/Kolkata', string $schedule_for = null, string $password = null, string $agenda = null, array $tracking_fields = null, array $settings = null)
+ * @method static retrieveMeeting(int $meeting_id)
+ * @method static deleteMeeting(int $meeting_id)
  */
 
 class LaravelZoom extends Facade{
 
+    /**
+     * @return string
+     */
     public static function getFacadeAccessor()
     {
         return 'laravelzoom';

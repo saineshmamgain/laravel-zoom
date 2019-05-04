@@ -14,6 +14,9 @@ use Illuminate\Support\ServiceProvider;
 
 class LaravelZoomServiceProvider extends ServiceProvider {
 
+    /**
+     *
+     */
     public function register()
     {
         $this->mergeConfigFrom(
@@ -24,6 +27,9 @@ class LaravelZoomServiceProvider extends ServiceProvider {
         });
     }
 
+    /**
+     *
+     */
     public function boot(){
         $this->publishes([
             __DIR__ . '/../config/laravel-zoom.php', config_path('laravel-zoom.php')

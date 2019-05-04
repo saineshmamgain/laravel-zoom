@@ -4,7 +4,6 @@ namespace CodeZilla\LaravelZoom\Api;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use InvalidArgumentException;
 
 /**
  * File : ZoomMeetings.php
@@ -20,6 +19,9 @@ class ZoomMeetings extends BaseApi {
     protected $defaultMeetingSettings;
     protected $defaultMeetingRecurrenceSettings;
 
+    /**
+     * ZoomMeetings constructor.
+     */
     public function __construct()
     {
         $this->defaultMeetingSettings = [
@@ -72,7 +74,7 @@ class ZoomMeetings extends BaseApi {
             'type' => $type,
         ],[
             'user_id' => 'required|string',
-            'type' => 'required|in:live,scheduled,upcoming'
+            'type' => 'required'
         ]);
 
         if ($validator->fails())
@@ -109,7 +111,6 @@ class ZoomMeetings extends BaseApi {
             $meeting_data['settings'] = $meeting_settings;
         if (!empty($meeting_tracking_fields))
             $meeting_data['tracking_fields'] = $meeting_tracking_fields;
-
         return $request->setBody($meeting_data, true)->sendRequest(config('laravel-zoom.urls.meetings.create.method'));
 
     }
@@ -118,30 +119,117 @@ class ZoomMeetings extends BaseApi {
     /**
      * @param string $user_id
      * @param string $topic
+     * @param string|null $schedule_for
      * @param string|null $password
      * @param string|null $agenda
      * @param array|null $tracking_fields
      * @param array|null $settings
      * @return array
      */
-    public function createInstantMeeting(string $user_id, string $topic, string $password = null, string $agenda = null, array $tracking_fields = null, array $settings = null){
+    public function createInstantMeeting(string $user_id, string $topic, string $schedule_for = null, string $password = null, string $agenda = null, array $tracking_fields = null, array $settings = null){
 
         $validator = Validator::make([
+            'user_id' => $user_id,
             'topic' => $topic,
             'password' => $password,
             'agenda' => $agenda,
             'tracking_fields' => $tracking_fields,
-            'settings' => $settings
+            'settings' => $settings,
+            'schedule_for' => $schedule_for
         ], [
+            'user_id' => 'required',
             'topic' => 'required|min:3',
             'password' => 'nullable',
             'agenda' => 'nullable',
             'tracking_fields' => 'nullable|array',
-            'settings' => 'nullable|array'
+            'settings' => 'nullable|array',
+            'schedule_for' => 'nullable'
+        ]);
+        if ($validator->fails())
+            return $this->sendError($validator->errors()->toArray());
+        $data = $validator->validated();
+        if (empty($data['settings']))
+            $meeting_settings = $this->defaultMeetingSettings;
+        else
+            $meeting_settings = array_merge($this->defaultMeetingSettings, $data['settings']);
+
+        if (empty($data['tracking_fields']))
+            $meeting_tracking_fields = [];
+        else
+            $meeting_tracking_fields = $data['tracking_fields'];
+        $meeting_data['topic'] = $data['topic'];
+        $meeting_data['type'] = 1;
+        if (!empty($data['schedule_for']))
+            $meeting_data['schedule_for'] = $data['schedule_for'];
+        else
+            $meeting_data['schedule_for'] = $user_id;
+        if (!empty($data['password']))
+            $meeting_data['password'] = $data['password'];
+        if (!empty($data['agenda']))
+            $meeting_data['agenda'] = $data['agenda'];
+
+        return $this->createMeeting($user_id, $meeting_data, $meeting_settings, $meeting_tracking_fields);
+    }
+
+
+    /**
+     * @param string $user_id
+     * @param string $topic
+     * @param Carbon $start_time
+     * @param int $duration
+     * @param string $timezone
+     * @param string|null $schedule_for
+     * @param string|null $password
+     * @param string|null $agenda
+     * @param array|null $tracking_fields
+     * @param array|null $settings
+     * @return array
+     */
+    public function createScheduledMeeting(string $user_id, string $topic, Carbon $start_time, int $duration = 60, string $timezone = 'Asia/Kolkata', string $schedule_for = null, string $password = null, string $agenda = null, array $tracking_fields = null, array $settings = null){
+
+        $validator = Validator::make([
+            'user_id' => $user_id,
+            'topic' => $topic,
+            'start_time' => $start_time,
+            'duration' => $duration,
+            'timezone' => $timezone,
+            'schedule_for' => $schedule_for,
+            'password' => $password,
+            'agenda' => $agenda,
+            'tracking_fields' => $tracking_fields,
+            'settings' => $settings
+        ],[
+            'user_id' => 'required',
+            'topic' => 'required|min:3',
+            'start_time' => [
+                'required',
+                function ($attribute, $value, $fail){
+                    if (!($value instanceof Carbon))
+                        $fail($attribute . ' should be a carbon object.');
+                },
+                function ($attribute, $value, $fail){
+                    if ($value->isPast())
+                        $fail($attribute.' cannot be in past.');
+                }
+            ],
+            'password' => 'nullable|string',
+            'agenda' => 'nullable|string',
+            'tracking_fields' => 'nullable|array',
+            'settings' => 'nullable|array',
+            'schedule_for' => 'nullable|string',
+            'duration' => 'required|numeric',
+            'timezone' => [
+                'required',
+                function($attribute, $value, $fail){
+                    if(!in_array($value, timezone_identifiers_list())){
+                        $fail($value . ' is not a valid timezone.');
+                    }
+                }
+            ],
         ]);
 
         if ($validator->fails())
-            return $this->sendError($validator->errors()->toArray());
+            $this->sendError($validator->errors()->toArray());
 
         $data = $validator->validated();
 
@@ -156,12 +244,40 @@ class ZoomMeetings extends BaseApi {
             $meeting_tracking_fields = $data['tracking_fields'];
 
         $meeting_data['topic'] = $data['topic'];
-        $meeting_data['type'] = 1;
-        if (!empty($meeting_data['password']))
+        $meeting_data['type'] = 2;
+        $meeting_data['start_time'] = $data['start_time']->setTimezone('UTC')->format('Y-m-d\TH:i:s\Z');;
+        $meeting_data['timezone'] = $data['timezone'];
+        $meeting_data['duration'] = $data['duration'];
+
+
+        if (!empty($data['schedule_for']))
+            $meeting_data['schedule_for'] = $data['schedule_for'];
+        else
+            $meeting_data['schedule_for'] = $user_id;
+
+        if (!empty($data['password']))
             $meeting_data['password'] = $data['password'];
         if (!empty($data['agenda']))
             $meeting_data['agenda'] = $data['agenda'];
 
         return $this->createMeeting($user_id, $meeting_data, $meeting_settings, $meeting_tracking_fields);
+    }
+
+    /**
+     * @param int $meeting_id
+     * @return array
+     */
+    public function retrieveMeeting(int $meeting_id){
+        $uri = Str::replaceFirst('{meeting_id}', $meeting_id, config('laravel-zoom.urls.meetings.retrieve.uri'));
+        return (new MakeRequest($uri))->sendRequest(config('laravel-zoom.urls.meetings.retrieve.method'));
+    }
+
+    /**
+     * @param int $meeting_id
+     * @return array
+     */
+    public function deleteMeeting(int $meeting_id){
+        $uri = Str::replaceFirst('{meeting_id}', $meeting_id, config('laravel-zoom.urls.meetings.delete.uri'));
+        return (new MakeRequest($uri))->sendRequest(config('laravel-zoom.urls.meetings.delete.method'));
     }
 }

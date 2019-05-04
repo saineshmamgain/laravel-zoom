@@ -39,6 +39,14 @@ return [
             'create' => [
                 'method' => 'post',
                 'uri' => '/users/{user_id}/meetings'
+            ],
+            'retrieve' => [
+                'method' => 'get',
+                'uri' => '/meetings/{meeting_id}'
+            ],
+            'delete' => [
+                'method' => 'delete',
+                'uri' => '/meetings/{meeting_id}'
             ]
         ]
     ],

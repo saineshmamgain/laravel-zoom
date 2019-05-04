@@ -12,7 +12,7 @@ use InvalidArgumentException;
  */
 
 
-class ZoomUsers {
+class ZoomUsers extends BaseApi {
 
     public function __construct()
     {

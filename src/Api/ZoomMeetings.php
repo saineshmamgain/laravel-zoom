@@ -88,7 +88,8 @@ class ZoomMeetings extends BaseApi {
         ];
         $params = http_build_query($params);
         $uri = Str::replaceFirst('{user_id}', $user_id, config('laravel-zoom.urls.meetings.list.uri'));
-        $request = new MakeRequest($uri . '?' . $params);
+        $requestClass = config('laravel-zoom.classes.make_request');
+        $request = new $requestClass($uri . '?' . $params);
         return $request->sendRequest(config('laravel-zoom.urls.meetings.list.method'));
     }
 
@@ -104,7 +105,8 @@ class ZoomMeetings extends BaseApi {
      */
     protected function createMeeting(string $user_id, array $meeting_data = [], array $meeting_settings = [], array $meeting_tracking_fields = [], array $meeting_recurring_settings = []){
         $uri = Str::replaceFirst('{user_id}', $user_id, config('laravel-zoom.urls.meetings.create.uri'));
-        $request = new MakeRequest($uri);
+        $requestClass = config('laravel-zoom.classes.make_request');
+        $request = new $requestClass($uri);
         if (!empty($meeting_recurring_settings))
             $meeting_data['recurrence'] = $meeting_recurring_settings;
         if (!empty($meeting_settings))
@@ -269,7 +271,8 @@ class ZoomMeetings extends BaseApi {
      */
     public function retrieveMeeting(int $meeting_id){
         $uri = Str::replaceFirst('{meeting_id}', $meeting_id, config('laravel-zoom.urls.meetings.retrieve.uri'));
-        return (new MakeRequest($uri))->sendRequest(config('laravel-zoom.urls.meetings.retrieve.method'));
+        $requestClass = config('laravel-zoom.classes.make_request');
+        return (new $requestClass($uri))->sendRequest(config('laravel-zoom.urls.meetings.retrieve.method'));
     }
 
     /**
@@ -278,6 +281,7 @@ class ZoomMeetings extends BaseApi {
      */
     public function deleteMeeting(int $meeting_id){
         $uri = Str::replaceFirst('{meeting_id}', $meeting_id, config('laravel-zoom.urls.meetings.delete.uri'));
-        return (new MakeRequest($uri))->sendRequest(config('laravel-zoom.urls.meetings.delete.method'));
+        $requestClass = config('laravel-zoom.classes.make_request');
+        return (new $requestClass($uri))->sendRequest(config('laravel-zoom.urls.meetings.delete.method'));
     }
 }

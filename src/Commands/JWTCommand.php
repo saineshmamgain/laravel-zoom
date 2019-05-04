@@ -54,7 +54,9 @@ class JWTCommand extends Command{
 
         $zoom_jwt_expires = (new Carbon())->addDays($days)->addHours($hours)->unix();
 
-        JWT::generate($api_key, $api_secret, ["alg" => "HS256","typ" => "JWT"], ["iss"=> $api_key,"exp"=> $zoom_jwt_expires]);
+        $jwtClass = config('laravel-zoom.classes.jwt');
+
+        $jwtClass::generate($api_key, $api_secret, ["alg" => "HS256","typ" => "JWT"], ["iss"=> $api_key,"exp"=> $zoom_jwt_expires]);
     }
 
 

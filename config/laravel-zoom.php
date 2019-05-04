@@ -51,5 +51,14 @@ return [
         ]
     ],
 
+    'classes' => [
+        'zoom_users' => \CodeZilla\LaravelZoom\Api\ZoomUsers::class,
+        'zoom_meetings' => \CodeZilla\LaravelZoom\Api\ZoomMeetings::class,
+        'make_request' => \CodeZilla\LaravelZoom\Api\MakeRequest::class,
+        'jwt_command' => \CodeZilla\LaravelZoom\Commands\JWTCommand::class,
+        'jwt' => \CodeZilla\LaravelZoom\JWT::class,
+        'laravel_zoom' => \CodeZilla\LaravelZoom\LaravelZoom::class
+    ],
+
     'default_user_id' => 'fTJCLJ7lSg6Ywh869X8h6w'
 ];

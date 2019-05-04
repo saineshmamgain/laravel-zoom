@@ -2,8 +2,6 @@
 namespace CodeZilla\LaravelZoom;
 
 use Carbon\Carbon;
-use CodeZilla\LaravelZoom\Api\ZoomMeetings;
-use CodeZilla\LaravelZoom\Api\ZoomUsers;
 
 /**
   * File : LaravelZoom.php
@@ -51,7 +49,8 @@ class LaravelZoom {
     public function getJWTToken(int $zoom_jwt_expires = 0){
         if ($zoom_jwt_expires == 0)
             $zoom_jwt_expires = (new Carbon())->addDays(30)->unix();
-        return JWT::generate($this->key, $this->secret, ["alg" => "HS256","typ" => "JWT"], ["iss"=> $this->key,"exp"=> $zoom_jwt_expires]);
+        $jwtClass = config('laravel-zoom.classes.jwt');
+        return $jwtClass::generate($this->key, $this->secret, ["alg" => "HS256","typ" => "JWT"], ["iss"=> $this->key,"exp"=> $zoom_jwt_expires]);
     }
 
     /**
@@ -60,7 +59,8 @@ class LaravelZoom {
      * @return array
      */
     public function getUsers(string $status = 'active', int $page_number = 1){
-        return (new ZoomUsers())->getUsers($status, $page_number);
+        $class = config('laravel-zoom.classes.zoom_users');
+        return (new $class())->getUsers($status, $page_number);
     }
 
     /**
@@ -70,7 +70,8 @@ class LaravelZoom {
      * @return array
      */
     public function getMeetings(string $user_id, string $type = 'live', int $page_number = 1){
-        return (new ZoomMeetings())->getMeetings($user_id, $type, $page_number);
+        $class = config('laravel-zoom.classes.zoom_meetings');
+        return (new $class())->getMeetings($user_id, $type, $page_number);
     }
 
     /**
@@ -83,7 +84,8 @@ class LaravelZoom {
      * @return array
      */
     public function createInstantMeeting(string $user_id, string $topic, string $password = null, string $agenda = null, array $tracking_fields = null, array $settings = null){
-        return (new ZoomMeetings())->createInstantMeeting($user_id, $topic, $password, $agenda, $tracking_fields, $settings);
+        $class = config('laravel-zoom.classes.zoom_meetings');
+        return (new $class())->createInstantMeeting($user_id, $topic, $password, $agenda, $tracking_fields, $settings);
     }
 
     /**
@@ -100,7 +102,8 @@ class LaravelZoom {
      * @return array
      */
     public function createScheduledMeeting(string $user_id, string $topic, Carbon $start_time, int $duration = 60, string $timezone = 'Asia/Kolkata', string $schedule_for = null, string $password = null, string $agenda = null, array $tracking_fields = null, array $settings = null){
-        return (new ZoomMeetings())->createScheduledMeeting($user_id, $topic, $start_time, $duration, $timezone, $schedule_for, $password, $agenda, $tracking_fields,$settings);
+        $class = config('laravel-zoom.classes.zoom_meetings');
+        return (new $class())->createScheduledMeeting($user_id, $topic, $start_time, $duration, $timezone, $schedule_for, $password, $agenda, $tracking_fields,$settings);
     }
 
     /**
@@ -108,7 +111,8 @@ class LaravelZoom {
      * @return array
      */
     public function retrieveMeeting(int $meeting_id){
-        return (new ZoomMeetings())->retrieveMeeting($meeting_id);
+        $class = config('laravel-zoom.classes.zoom_meetings');
+        return (new $class())->retrieveMeeting($meeting_id);
     }
 
     /**
@@ -116,6 +120,7 @@ class LaravelZoom {
      * @return array
      */
     public function deleteMeeting(int $meeting_id){
-        return (new ZoomMeetings())->deleteMeeting($meeting_id);
+        $class = config('laravel-zoom.classes.zoom_meetings');
+        return (new $class())->deleteMeeting($meeting_id);
     }
 }

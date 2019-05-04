@@ -1,6 +1,5 @@
 <?php
 namespace CodeZilla\LaravelZoom;
-use CodeZilla\LaravelZoom\Commands\JWTCommand;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -23,7 +22,8 @@ class LaravelZoomServiceProvider extends ServiceProvider {
             __DIR__ . '/../config/laravel-zoom.php', 'laravel-zoom'
         );
         $this->app->bind('laravelzoom', function (){
-            return new LaravelZoom(config('laravel-zoom.zoom_api_key'), config('laravel-zoom.zoom_api_secret'));
+            $class = config('laravel-zoom.classes.laravel_zoom');
+            return new $class(config('laravel-zoom.zoom_api_key'), config('laravel-zoom.zoom_api_secret'));
         });
     }
 
@@ -36,7 +36,7 @@ class LaravelZoomServiceProvider extends ServiceProvider {
         ]);
         if ($this->app->runningInConsole()){
             $this->commands([
-                JWTCommand::class,
+                config('laravel-zoom.classes.jwt_command'),
             ]);
         }
     }

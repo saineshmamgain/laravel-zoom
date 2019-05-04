@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static createScheduledMeeting(string $user_id, string $topic, Carbon $start_time, int $duration = 60, string $timezone = 'Asia/Kolkata', string $schedule_for = null, string $password = null, string $agenda = null, array $tracking_fields = null, array $settings = null)
  * @method static retrieveMeeting(int $meeting_id)
  * @method static deleteMeeting(int $meeting_id)
+ * @method static updateScheduledMeeting(int $meeting_id, string $agenda = null, Carbon $start_time = null, int $duration = 0, array $settings = [])
  */
 
 class LaravelZoom extends Facade{

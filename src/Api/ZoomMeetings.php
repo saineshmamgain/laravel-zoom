@@ -119,6 +119,23 @@ class ZoomMeetings extends BaseApi {
 
 
     /**
+     * @param string $meeting_id
+     * @param array $meeting_data
+     * @param array $meeting_settings
+     * @return array
+     *
+     * @example : https://marketplace.zoom.us/docs/api-reference/zoom-api/meetings/meetingupdate
+     */
+    protected function updateMeeting(string $meeting_id, array $meeting_data = [], array $meeting_settings = []){
+        $uri = Str::replaceFirst('{meeting_id}', $meeting_id, config('laravel-zoom.urls.meetings.update.uri'));
+        $requestClass = config('laravel-zoom.classes.make_request');
+        $request = new $requestClass($uri);
+        if (!empty($meeting_settings))
+            $meeting_data['settings'] = $meeting_settings;
+        return $request->setBody($meeting_data, true)->sendRequest(config('laravel-zoom.urls.meetings.update.method'));
+    }
+
+    /**
      * @param string $user_id
      * @param string $topic
      * @param string|null $schedule_for
@@ -283,5 +300,50 @@ class ZoomMeetings extends BaseApi {
         $uri = Str::replaceFirst('{meeting_id}', $meeting_id, config('laravel-zoom.urls.meetings.delete.uri'));
         $requestClass = config('laravel-zoom.classes.make_request');
         return (new $requestClass($uri))->sendRequest(config('laravel-zoom.urls.meetings.delete.method'));
+    }
+
+    public function updateScheduledMeeting(int $meeting_id, string $agenda = null, Carbon $start_time = null, int $duration = 0, array $settings = []){
+        $validator = Validator::make([
+            'meeting_id' => $meeting_id,
+            'agenda' => $agenda,
+            'start_time' => $start_time,
+            'duration' => $duration,
+            'settings' => $settings
+        ],[
+            'meeting_id' => 'required|numeric',
+            'agenda' => 'nullable|string',
+            'start_time' => [
+                'nullable',
+                function ($attribute, $value, $fail){
+                    if (!($value instanceof Carbon))
+                        $fail($attribute . ' should be a carbon object.');
+                },
+                function ($attribute, $value, $fail){
+                    if ($value->isPast())
+                        $fail($attribute.' cannot be in past.');
+                }
+            ],
+            'duration' => 'nullable|numeric',
+            'settings' => 'nullable|array'
+        ]);
+
+        if ($validator->fails())
+            return $this->sendError($validator->errors()->toArray());
+        $data = $validator->validated();
+        $meeting_data = [];
+        $meeting_settings = [];
+        if (!empty($data['agenda']))
+            $meeting_data['agenda'] = $data['agenda'];
+        if (!empty($data['start_time']))
+            $meeting_data['start_time'] = $data['start_time']->setTimezone('UTC')->format('Y-m-d\TH:i:s\Z');
+        if (!empty($data['duration']))
+            $meeting_data['duration'] = $data['duration'];
+        if (!empty($data['settings']))
+            $meeting_settings = $data['settings'];
+
+        if (empty($meeting_data) && empty($meeting_settings))
+            return $this->sendError(['data'=> 'no change in data']);
+
+        return $this->updateMeeting($meeting_id,$meeting_data,$meeting_settings);
     }
 }

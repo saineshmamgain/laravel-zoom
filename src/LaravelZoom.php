@@ -123,4 +123,9 @@ class LaravelZoom {
         $class = config('laravel-zoom.classes.zoom_meetings');
         return (new $class())->deleteMeeting($meeting_id);
     }
+
+    public function updateScheduledMeeting(int $meeting_id, string $agenda = null, Carbon $start_time = null, int $duration = 0, array $settings = []){
+        $class = config('laravel-zoom.classes.zoom_meetings');
+        return (new $class())->updateScheduledMeeting($meeting_id, $agenda, $start_time, $duration, $settings);
+    }
 }

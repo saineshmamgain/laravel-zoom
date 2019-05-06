@@ -17,8 +17,8 @@ use Illuminate\Support\Str;
 
 class JWTCommand extends Command{
 
-    protected $signature = 'zoom:jwt-generate {api_key? : Zoom API Key} {api_secret? : Zoom API Secret} {--D|days=0 : Validity of the token in days. Defaults to 0} {--H|hours=1 : Validity of token in Hours. Defaults to 1}';
-    protected $description = 'Generate Zoom JWT Token.';
+    protected $signature = 'zoom:jwt-generate {api_key? : Zoom API Key} {api_secret? : Zoom API Secret} {--D|days=0 : Validity of the token in days. Defaults to 0} {--H|hours=1 : Validity of token in Hours. Defaults to 1} {--F|force}';
+    protected $description = 'Generate and update Zoom JWT Token.';
 
     protected $editor;
 
@@ -36,6 +36,7 @@ class JWTCommand extends Command{
     public function handle(){
         $days = $this->option('days');
         $hours = $this->option('hours');
+        $force = $this->option('force');
 
         $api_key = $this->argument('api_key');
         $api_secret = $this->argument('api_secret');
@@ -56,7 +57,7 @@ class JWTCommand extends Command{
 
         $jwtClass = config('laravel-zoom.classes.jwt');
 
-        $jwtClass::generate($api_key, $api_secret, ["alg" => "HS256","typ" => "JWT"], ["iss"=> $api_key,"exp"=> $zoom_jwt_expires]);
+        $jwtClass::generate($api_key, $api_secret, ["alg" => "HS256","typ" => "JWT"], ["iss"=> $api_key,"exp"=> $zoom_jwt_expires], $force);
     }
 
 

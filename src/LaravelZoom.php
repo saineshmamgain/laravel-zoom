@@ -2,7 +2,6 @@
 namespace CodeZilla\LaravelZoom;
 
 use Carbon\Carbon;
-use CodeZilla\LaravelZoom\Api\ZoomMeetingPolls;
 
 /**
   * File : LaravelZoom.php
@@ -160,10 +159,20 @@ class LaravelZoom {
 
     /**
      * @param string $user_id
+     * @param int $page_number
      * @return array
      */
-    public function getRecordings(string $user_id){
+    public function getRecordings(string $user_id, int $page_number = 1){
         $class = config('laravel-zoom.classes.zoom_recordings');
-        return (new $class())->getRecordings($user_id);
+        return (new $class())->getRecordings($user_id, $page_number);
+    }
+
+    /**
+     * @param string $user_id
+     * @return mixed
+     */
+    public function retrieveUser(string $user_id){
+        $class = config('laravel-zoom.classes.zoom_users');
+        return (new $class())->retrieveUser($user_id);
     }
 }

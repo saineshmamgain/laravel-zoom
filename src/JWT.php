@@ -22,10 +22,11 @@ class JWT {
      * @param array $headers
      * @param array $payload
      * @param string $algo
+     * @param bool $force
      * @return mixed|string
      */
-    public static function generate(string $key, string $secret, array $headers, array $payload, string $algo = "sha256"){
-        if (self::validJWTExists()){
+    public static function generate(string $key, string $secret, array $headers, array $payload, $force = false, string $algo = "sha256"){
+        if (self::validJWTExists() && !$force){
             return env('ZOOM_JWT_TOKEN');
         }
         $headerEncoded = self::base64UrlEncode(json_encode($headers));

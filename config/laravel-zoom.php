@@ -29,6 +29,10 @@ return [
             'list' => [
                 'method' => 'get',
                 'uri' => '/users'
+            ],
+            'retrieve' => [
+                'method' => 'get',
+                'uri' => '/users/{user_id}'
             ]
         ],
         'meetings' => [

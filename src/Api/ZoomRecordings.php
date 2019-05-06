@@ -16,12 +16,19 @@ class ZoomRecordings extends BaseApi{
 
     /**
      * @param string $user_id
+     * @param int $page_number
      * @return array
      */
-    public function getRecordings(string $user_id){
+    public function getRecordings(string $user_id, int $page_number = 1){
+        $params = [
+            'page_size' => config('laravel-zoom.api.per_page_records'),
+            'page_number' => $page_number
+        ];
+
+        $params = http_build_query($params);
         $class = config('laravel-zoom.classes.make_request');
         $uri = Str::replaceFirst('{user_id}', $user_id, config('laravel-zoom.urls.recordings.list.uri'));
-        return (new $class($uri))->sendRequest(config('laravel-zoom.urls.recordings.list.method'));
+        return (new $class($uri . '?' . $params))->sendRequest(config('laravel-zoom.urls.recordings.list.method'));
     }
 
 

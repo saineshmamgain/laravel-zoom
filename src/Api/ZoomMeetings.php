@@ -346,4 +346,6 @@ class ZoomMeetings extends BaseApi {
 
         return $this->updateMeeting($meeting_id,$meeting_data,$meeting_settings);
     }
+
+
 }

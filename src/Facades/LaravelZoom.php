@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static updateScheduledMeeting(int $meeting_id, string $agenda = null, Carbon $start_time = null, int $duration = 0, array $settings = [])
  * @method static getMeetingPolls(int $meeting_id)
  * @method static createMeetingPoll(int $meeting_id, string $poll_title, array $questions)
+ * @method static getRecordings(string $user_id)
  */
 
 class LaravelZoom extends Facade{

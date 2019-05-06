@@ -157,4 +157,13 @@ class LaravelZoom {
         $class = config('laravel-zoom.classes.zoom_meeting_polls');
         return (new $class())->createMeetingPoll($meeting_id, $poll_title, $questions);
     }
+
+    /**
+     * @param string $user_id
+     * @return array
+     */
+    public function getRecordings(string $user_id){
+        $class = config('laravel-zoom.classes.zoom_recordings');
+        return (new $class())->getRecordings($user_id);
+    }
 }

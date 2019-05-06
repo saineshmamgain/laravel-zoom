@@ -47,6 +47,10 @@ return [
             'delete' => [
                 'method' => 'delete',
                 'uri' => '/meetings/{meeting_id}'
+            ],
+            'update' => [
+                'method' => 'patch',
+                'uri' => '/meetings/{meeting_id}'
             ]
         ],
         'polls' => [
@@ -58,6 +62,12 @@ return [
                 'method' => 'post',
                 'uri' => '/meetings/{meeting_id}/polls'
             ]
+        ],
+        'recordings' => [
+            'list' => [
+                'method' => 'get',
+                'uri' => '/users/{user_id}/recordings'
+            ]
         ]
     ],
 
@@ -65,10 +75,11 @@ return [
         'zoom_users' => \CodeZilla\LaravelZoom\Api\ZoomUsers::class,
         'zoom_meetings' => \CodeZilla\LaravelZoom\Api\ZoomMeetings::class,
         'zoom_meeting_polls' => \CodeZilla\LaravelZoom\Api\ZoomMeetingPolls::class,
+        'zoom_recordings' => \CodeZilla\LaravelZoom\Api\ZoomRecordings::class,
         'make_request' => \CodeZilla\LaravelZoom\Api\MakeRequest::class,
         'jwt_command' => \CodeZilla\LaravelZoom\Commands\JWTCommand::class,
         'jwt' => \CodeZilla\LaravelZoom\JWT::class,
-        'laravel_zoom' => \CodeZilla\LaravelZoom\LaravelZoom::class
+        'laravel_zoom' => \CodeZilla\LaravelZoom\LaravelZoom::class,
     ],
 
     'default_user_id' => 'fTJCLJ7lSg6Ywh869X8h6w'

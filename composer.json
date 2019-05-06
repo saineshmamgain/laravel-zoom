@@ -16,5 +16,12 @@
         "psr-4": {
             "CodeZilla\\LaravelZoom\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "CodeZilla\\LaravelZoom\\LaravelZoomServiceProvider"
+            ]
+        }
     }
 }

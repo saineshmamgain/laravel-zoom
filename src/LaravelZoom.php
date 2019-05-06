@@ -2,6 +2,7 @@
 namespace CodeZilla\LaravelZoom;
 
 use Carbon\Carbon;
+use CodeZilla\LaravelZoom\Api\ZoomMeetingPolls;
 
 /**
   * File : LaravelZoom.php
@@ -124,8 +125,36 @@ class LaravelZoom {
         return (new $class())->deleteMeeting($meeting_id);
     }
 
+    /**
+     * @param int $meeting_id
+     * @param string|null $agenda
+     * @param Carbon|null $start_time
+     * @param int $duration
+     * @param array $settings
+     * @return array
+     */
     public function updateScheduledMeeting(int $meeting_id, string $agenda = null, Carbon $start_time = null, int $duration = 0, array $settings = []){
         $class = config('laravel-zoom.classes.zoom_meetings');
         return (new $class())->updateScheduledMeeting($meeting_id, $agenda, $start_time, $duration, $settings);
+    }
+
+    /**
+     * @param int $meeting_id
+     * @return array
+     */
+    public function getMeetingPolls(int $meeting_id){
+        $class = config('laravel-zoom.classes.zoom_meeting_polls');
+        return (new $class())->getMeetingPolls($meeting_id);
+    }
+
+    /**
+     * @param int $meeting_id
+     * @param string $poll_title
+     * @param array $questions
+     * @return array
+     */
+    public function createMeetingPoll(int $meeting_id, string $poll_title, array $questions){
+        $class = config('laravel-zoom.classes.zoom_meeting_polls');
+        return (new $class())->createMeetingPoll($meeting_id, $poll_title, $questions);
     }
 }

@@ -48,12 +48,23 @@ return [
                 'method' => 'delete',
                 'uri' => '/meetings/{meeting_id}'
             ]
+        ],
+        'polls' => [
+            'list' => [
+                'method' => 'get',
+                'uri' => '/meetings/{meeting_id}/polls'
+            ],
+            'create' => [
+                'method' => 'post',
+                'uri' => '/meetings/{meeting_id}/polls'
+            ]
         ]
     ],
 
     'classes' => [
         'zoom_users' => \CodeZilla\LaravelZoom\Api\ZoomUsers::class,
         'zoom_meetings' => \CodeZilla\LaravelZoom\Api\ZoomMeetings::class,
+        'zoom_meeting_polls' => \CodeZilla\LaravelZoom\Api\ZoomMeetingPolls::class,
         'make_request' => \CodeZilla\LaravelZoom\Api\MakeRequest::class,
         'jwt_command' => \CodeZilla\LaravelZoom\Commands\JWTCommand::class,
         'jwt' => \CodeZilla\LaravelZoom\JWT::class,

@@ -36,7 +36,7 @@ class ZoomMeetings extends BaseApi {
             'approval_type' => 2, // 0-automatic, 1-manually, 2-not required
             'registration_type' => 3, // 1-Attendees register once and can attend any of the occurrences., 2-Attendees need to register for each occurrence to attend., 3-Attendees register once and can choose one or more occurrences to attend.
             'audio' => 'voip', // voip, telephony, both
-            'auto_recording' => 'none', // none, local, cloud
+            'auto_recording' => 'cloud', // none, local, cloud
             'enforce_login' => false,
             'enforce_login_domains' => null,
             'alternative_hosts' => null,

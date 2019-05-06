@@ -1,5 +1,8 @@
-##Laravel Zoom
+# Laravel-Zoom (In Development)
 
-A simple package to integrate Zoom into Laravel.
+A package to Integrate Zoom APIs in Laravel.
+##
 
-Package is still in development
+## Installation:
+
+    composer require saineshmamgain/laravel-zoom

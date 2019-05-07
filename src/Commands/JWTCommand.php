@@ -53,7 +53,7 @@ class JWTCommand extends Command{
         if (empty($api_secret))
             $api_secret = $this->ask('Enter Zoom API Secret: ');
 
-        $zoom_jwt_expires = (new Carbon())->addDays($days)->addHours($hours)->unix();
+        $zoom_jwt_expires = (new Carbon())->addDays($days)->addHours($hours)->getTimestamp();
 
         $jwtClass = config('laravel-zoom.classes.jwt');
 

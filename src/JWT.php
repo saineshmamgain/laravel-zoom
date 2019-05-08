@@ -81,10 +81,6 @@ class JWT {
         return $decoded;
     }
 
-    public static function regenerate(){
-
-    }
-
     /**
      * @param array $data
      * @return bool

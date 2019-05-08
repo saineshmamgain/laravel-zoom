@@ -48,7 +48,7 @@ class LaravelZoom {
      */
     public function getJWTToken(int $zoom_jwt_expires = 0){
         if ($zoom_jwt_expires == 0)
-            $zoom_jwt_expires = (new Carbon())->addDays(30)->unix();
+            $zoom_jwt_expires = (new Carbon())->addDays(30)->getTimestamp();
         $jwtClass = config('laravel-zoom.classes.jwt');
         return $jwtClass::generate($this->key, $this->secret, ["alg" => "HS256","typ" => "JWT"], ["iss"=> $this->key,"exp"=> $zoom_jwt_expires]);
     }
@@ -174,5 +174,27 @@ class LaravelZoom {
     public function retrieveUser(string $user_id){
         $class = config('laravel-zoom.classes.zoom_users');
         return (new $class())->retrieveUser($user_id);
+    }
+
+    /**
+     * @param int $meeting_id
+     * @param string $poll_id
+     * @param string $poll_title
+     * @param array $questions
+     * @return array
+     */
+    public function updateMeetingPoll(int $meeting_id, string $poll_id, string $poll_title, array $questions){
+        $class = config('laravel-zoom.classes.zoom_meeting_polls');
+        return (new $class())->updateMeetingPoll($meeting_id, $poll_id, $poll_title, $questions);
+    }
+
+    /**
+     * @param int $meeting_id
+     * @param string $poll_id
+     * @return array
+     */
+    public function deleteMeetingPoll(int $meeting_id, string $poll_id){
+        $class = config('laravel-zoom.classes.zoom_meeting_polls');
+        return (new $class())->deleteMeetingPoll($meeting_id, $poll_id);
     }
 }

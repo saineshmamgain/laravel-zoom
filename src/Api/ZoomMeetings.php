@@ -224,7 +224,7 @@ class ZoomMeetings extends BaseApi {
                 'required',
                 function ($attribute, $value, $fail){
                     if (!($value instanceof Carbon))
-                        $fail($attribute . ' should be a carbon object.');
+                        $fail($attribute . ' should be a \Carbon\Carbon object.');
                 },
                 function ($attribute, $value, $fail){
                     if ($value->isPast())
@@ -316,7 +316,7 @@ class ZoomMeetings extends BaseApi {
                 'nullable',
                 function ($attribute, $value, $fail){
                     if (!($value instanceof Carbon))
-                        $fail($attribute . ' should be a carbon object.');
+                        $fail($attribute . ' should be a \Carbon\Carbon object.');
                 },
                 function ($attribute, $value, $fail){
                     if ($value->isPast())

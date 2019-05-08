@@ -42,6 +42,10 @@ use Illuminate\Support\Facades\Facade;
  * @method static getRecordings(string $user_id)
  *
  * @method static retrieveUser(string $user_id)
+ *
+ * @method static updateMeetingPoll(int $meeting_id, string $poll_id, string $poll_title, array $questions)
+ *
+ * @method static deleteMeetingPoll(int $meeting_id, string $poll_id)
  */
 
 class LaravelZoom extends Facade{

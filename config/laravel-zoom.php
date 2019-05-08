@@ -9,6 +9,15 @@
   */
 
 
+use CodeZilla\LaravelZoom\Api\MakeRequest;
+use CodeZilla\LaravelZoom\Api\ZoomMeetingPolls;
+use CodeZilla\LaravelZoom\Api\ZoomMeetings;
+use CodeZilla\LaravelZoom\Api\ZoomRecordings;
+use CodeZilla\LaravelZoom\Api\ZoomUsers;
+use CodeZilla\LaravelZoom\Commands\JWTCommand;
+use CodeZilla\LaravelZoom\JWT;
+use CodeZilla\LaravelZoom\LaravelZoom;
+
 return [
 
     'zoom_api_key' => env('ZOOM_API_KEY'),
@@ -65,6 +74,14 @@ return [
             'create' => [
                 'method' => 'post',
                 'uri' => '/meetings/{meeting_id}/polls'
+            ],
+            'update' => [
+                'method' => 'put',
+                'uri' => '/meetings/{meeting_id}/polls/{poll_id}'
+            ],
+            'delete' => [
+                'method' => 'delete',
+                'uri' => '/meetings/{meeting_id}/polls/{poll_id}'
             ]
         ],
         'recordings' => [
@@ -76,14 +93,14 @@ return [
     ],
 
     'classes' => [
-        'zoom_users' => \CodeZilla\LaravelZoom\Api\ZoomUsers::class,
-        'zoom_meetings' => \CodeZilla\LaravelZoom\Api\ZoomMeetings::class,
-        'zoom_meeting_polls' => \CodeZilla\LaravelZoom\Api\ZoomMeetingPolls::class,
-        'zoom_recordings' => \CodeZilla\LaravelZoom\Api\ZoomRecordings::class,
-        'make_request' => \CodeZilla\LaravelZoom\Api\MakeRequest::class,
-        'jwt_command' => \CodeZilla\LaravelZoom\Commands\JWTCommand::class,
-        'jwt' => \CodeZilla\LaravelZoom\JWT::class,
-        'laravel_zoom' => \CodeZilla\LaravelZoom\LaravelZoom::class,
+        'zoom_users' => ZoomUsers::class,
+        'zoom_meetings' => ZoomMeetings::class,
+        'zoom_meeting_polls' => ZoomMeetingPolls::class,
+        'zoom_recordings' => ZoomRecordings::class,
+        'make_request' => MakeRequest::class,
+        'jwt_command' => JWTCommand::class,
+        'jwt' => JWT::class,
+        'laravel_zoom' => LaravelZoom::class,
     ],
 
     'default_user_id' => 'fTJCLJ7lSg6Ywh869X8h6w'

@@ -132,9 +132,9 @@ class LaravelZoom {
      * @param array $settings
      * @return array
      */
-    public function updateScheduledMeeting(int $meeting_id, string $agenda = null, Carbon $start_time = null, int $duration = 0, array $settings = []){
+    public function updateScheduledMeeting(int $meeting_id, string $agenda = null, Carbon $start_time = null,  string $timezone = 'Asia/Kolkata', int $duration = 0, array $settings = []){
         $class = config('laravel-zoom.classes.zoom_meetings');
-        return (new $class())->updateScheduledMeeting($meeting_id, $agenda, $start_time, $duration, $settings);
+        return (new $class())->updateScheduledMeeting($meeting_id, $agenda, $start_time, $timezone, $duration, $settings);
     }
 
     /**

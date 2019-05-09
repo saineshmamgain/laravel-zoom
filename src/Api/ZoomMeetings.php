@@ -55,7 +55,7 @@ class ZoomMeetings extends BaseApi {
             'monthly_week' => 1, // -1-Last Week, 1-First Week, 2-Second Week, 3-Third Week, 4-Fourth Week
             'monthly_week_day' => 2, // 1-Sunday, 2-Monday, 3-Tuesday, 4-Wednesday, 5-Thursday, 6-Friday, 7-Saturday
             'end_times' => 10,
-            'end_date_time' => now()->tz('UTC')->format('Y-m-d\TH:i:s\Z')
+            'end_date_time' => now()->setTimezone('UTC')->format('Y-m-d\TH:i:s\Z')
         ];
     }
 
@@ -263,7 +263,7 @@ class ZoomMeetings extends BaseApi {
 
         $meeting_data['topic'] = $data['topic'];
         $meeting_data['type'] = 2;
-        $meeting_data['start_time'] = $data['start_time']->setTimezone('UTC')->format('Y-m-d\TH:i:s\Z');;
+        $meeting_data['start_time'] = $data['start_time']->setTimezone($timezone)->format('Y-m-d\TH:i:s');;
         $meeting_data['timezone'] = $data['timezone'];
         $meeting_data['duration'] = $data['duration'];
 
@@ -301,7 +301,7 @@ class ZoomMeetings extends BaseApi {
         return (new $requestClass($uri))->sendRequest(config('laravel-zoom.urls.meetings.delete.method'));
     }
 
-    public function updateScheduledMeeting(int $meeting_id, string $agenda = null, Carbon $start_time = null, int $duration = 0, array $settings = []){
+    public function updateScheduledMeeting(int $meeting_id, string $agenda = null, Carbon $start_time = null, string $timezone = 'Asia/Kolkata', int $duration = 0, array $settings = []){
         $validator = Validator::make([
             'meeting_id' => $meeting_id,
             'agenda' => $agenda,
@@ -334,7 +334,7 @@ class ZoomMeetings extends BaseApi {
         if (!empty($data['agenda']))
             $meeting_data['agenda'] = $data['agenda'];
         if (!empty($data['start_time']))
-            $meeting_data['start_time'] = $data['start_time']->setTimezone('UTC')->format('Y-m-d\TH:i:s\Z');
+            $meeting_data['start_time'] = $data['start_time']->setTimezone($timezone)->format('Y-m-d\TH:i:s');
         if (!empty($data['duration']))
             $meeting_data['duration'] = $data['duration'];
         if (!empty($data['settings']))

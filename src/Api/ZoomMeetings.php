@@ -35,7 +35,7 @@ class ZoomMeetings extends BaseApi {
             'use_pmi' => false,
             'approval_type' => 2, // 0-automatic, 1-manually, 2-not required
             'registration_type' => 3, // 1-Attendees register once and can attend any of the occurrences., 2-Attendees need to register for each occurrence to attend., 3-Attendees register once and can choose one or more occurrences to attend.
-            'audio' => 'voip', // voip, telephony, both
+            'audio' => 'both', // voip, telephony, both
             'auto_recording' => 'cloud', // none, local, cloud
             'enforce_login' => false,
             'enforce_login_domains' => null,
@@ -55,7 +55,7 @@ class ZoomMeetings extends BaseApi {
             'monthly_week' => 1, // -1-Last Week, 1-First Week, 2-Second Week, 3-Third Week, 4-Fourth Week
             'monthly_week_day' => 2, // 1-Sunday, 2-Monday, 3-Tuesday, 4-Wednesday, 5-Thursday, 6-Friday, 7-Saturday
             'end_times' => 10,
-            'end_date_time' => now()->tz('UTC')->format('yyyy-MM-ddTHH:mm:ssZ')
+            'end_date_time' => now()->tz('UTC')->format('Y-m-d\TH:i:s\Z')
         ];
     }
 
@@ -114,7 +114,6 @@ class ZoomMeetings extends BaseApi {
         if (!empty($meeting_tracking_fields))
             $meeting_data['tracking_fields'] = $meeting_tracking_fields;
         return $request->setBody($meeting_data, true)->sendRequest(config('laravel-zoom.urls.meetings.create.method'));
-
     }
 
 

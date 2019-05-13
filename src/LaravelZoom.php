@@ -64,6 +64,20 @@ class LaravelZoom {
     }
 
     /**
+     * @param string $email
+     * @param string $first_name
+     * @param string $last_name
+     * @param string|null $password
+     * @param int $type
+     * @param string $action
+     * @return array
+     */
+    public function createUser(string $email, string $first_name, string $last_name, string $password = null, int $type = 1, string $action = 'create'){
+        $class = config('laravel-zoom.classes.zoom_users');
+        return (new $class())->createUser($email, $first_name, $last_name, $password, $type, $action);
+    }
+
+    /**
      * @param string $user_id
      * @param string $type
      * @param int $page_number

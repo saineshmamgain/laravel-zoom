@@ -35,6 +35,10 @@ return [
 
     'urls' => [
         'users' => [
+            'create' => [
+                'method' => 'post',
+                'uri' => '/users'
+            ],
             'list' => [
                 'method' => 'get',
                 'uri' => '/users'

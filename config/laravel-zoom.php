@@ -68,6 +68,10 @@ return [
             'update' => [
                 'method' => 'patch',
                 'uri' => '/meetings/{meeting_id}'
+            ],
+            'get_past_meeting' => [
+                'method' => 'get',
+                'uri' => 'past_meetings/{meeting_uuid}'
             ]
         ],
         'polls' => [
@@ -107,5 +111,5 @@ return [
         'laravel_zoom' => LaravelZoom::class,
     ],
 
-    'default_user_id' => 'fTJCLJ7lSg6Ywh869X8h6w'
+    'default_user_id' => null
 ];

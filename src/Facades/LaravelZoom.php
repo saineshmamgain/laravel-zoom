@@ -48,6 +48,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static deleteMeetingPoll(int $meeting_id, string $poll_id)
  *
  * @method static createUser(string $email, string $first_name, string $last_name, string $password = null, int $type = 1, string $action = 'create')
+ *
+ * @method static getPastMeeting(string $meeting_uuid)
  */
 
 class LaravelZoom extends Facade{

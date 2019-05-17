@@ -88,6 +88,11 @@ class LaravelZoom {
         return (new $class())->getMeetings($user_id, $type, $page_number);
     }
 
+    public function getPastMeeting(string $meeting_uuid){
+        $class = config('laravel-zoom.classes.zoom_meetings');
+        return (new $class())->getPastMeeting($meeting_uuid);
+    }
+
     /**
      * @param string $user_id
      * @param string $topic

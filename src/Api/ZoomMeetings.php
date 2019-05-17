@@ -346,5 +346,9 @@ class ZoomMeetings extends BaseApi {
         return $this->updateMeeting($meeting_id,$meeting_data,$meeting_settings);
     }
 
-
+    public function getPastMeeting(string $meeting_uuid){
+        $uri = Str::replaceFirst('{meeting_uuid}', $meeting_uuid, config('laravel-zoom.urls.meetings.get_past_meeting.uri'));
+        $requestClass = config('laravel-zoom.classes.make_request');
+        return (new $requestClass($uri))->sendRequest(config('laravel-zoom.urls.meetings.get_past_meeting.method'));
+    }
 }

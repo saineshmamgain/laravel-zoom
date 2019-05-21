@@ -71,7 +71,7 @@ return [
             ],
             'get_past_meeting' => [
                 'method' => 'get',
-                'uri' => 'past_meetings/{meeting_uuid}'
+                'uri' => '/past_meetings/{meeting_uuid}'
             ]
         ],
         'polls' => [
@@ -111,5 +111,5 @@ return [
         'laravel_zoom' => LaravelZoom::class,
     ],
 
-    'default_user_id' => null
+    'default_user_id' => ''
 ];
